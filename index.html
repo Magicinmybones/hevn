@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#eef4fd">
 <title>hevn — Global business banking</title>
+<script>
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.classList.add('entrance-ready');
+}
+</script>
 <style>
 /* ==========================================================================
    hevn hero — precision build
@@ -393,7 +398,64 @@ a:focus-visible,button:focus-visible{outline:2px solid #4f7cff;outline-offset:2p
   }
   .art img{object-position:50% 72%}   /* keeps the symbol clear of the badge when cropped */
 }
-@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+/* One opening composition. The ambient image remains the still backdrop. */
+@keyframes hevn-nav-enter{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+@keyframes hevn-line-enter{
+  from{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(.32em)}
+  to{opacity:1;clip-path:inset(0);transform:none}
+}
+@keyframes hevn-panel-enter{
+  from{-webkit-mask-position:0 0;mask-position:0 0}
+  to{-webkit-mask-position:0 100%;mask-position:0 100%}
+}
+@keyframes hevn-support-enter{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+@keyframes hevn-badge-enter{
+  from{opacity:0}
+  to{opacity:1}
+}
+:root.entrance-ready .top .logo{
+  animation:hevn-nav-enter .62s cubic-bezier(.22,1,.36,1) .04s both;
+}
+:root.entrance-ready .top .nav{
+  animation:hevn-nav-enter .58s cubic-bezier(.22,1,.36,1) .16s both;
+}
+:root.entrance-ready .top .actions,
+:root.entrance-ready .top .menu-toggle{
+  animation:hevn-nav-enter .58s cubic-bezier(.22,1,.36,1) .26s both;
+}
+:root.entrance-ready .panel{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 40%,#000 50%);
+  mask-image:linear-gradient(to bottom,transparent 40%,#000 50%);
+  -webkit-mask-size:100% 300%;mask-size:100% 300%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  animation:hevn-panel-enter 1.46s cubic-bezier(.4,0,.2,1) .18s both;
+}
+:root.entrance-ready .headline span{
+  animation:hevn-line-enter .86s cubic-bezier(.22,1,.36,1) both;
+}
+:root.entrance-ready .headline span:nth-child(1){animation-delay:.34s}
+:root.entrance-ready .headline span:nth-child(2){animation-delay:.47s}
+:root.entrance-ready .headline span:nth-child(3){animation-delay:.70s}
+:root.entrance-ready .headline span:nth-child(4){animation-delay:.83s}
+:root.entrance-ready .pitch p{
+  animation:hevn-support-enter .68s cubic-bezier(.22,1,.36,1) 1.02s both;
+}
+:root.entrance-ready .pitch .cta{
+  animation:hevn-support-enter .68s cubic-bezier(.22,1,.36,1) 1.27s both;
+}
+:root.entrance-ready .panel .badge{
+  animation:hevn-badge-enter .58s cubic-bezier(.22,1,.36,1) 1.62s both;
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important}
+  :root.entrance-ready *{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -466,6 +528,12 @@ a:focus-visible,button:focus-visible{outline:2px solid #4f7cff;outline-offset:2p
 </main>
 <script>
 (function(){
+  var badge=document.querySelector('.panel .badge');
+  badge.addEventListener('animationend',function(event){
+    if(event.animationName==='hevn-badge-enter'){
+      document.documentElement.classList.remove('entrance-ready');
+    }
+  });
   var top=document.getElementById('top'),
       btn=top.querySelector('.menu-toggle'),
       menu=document.getElementById('menu');
